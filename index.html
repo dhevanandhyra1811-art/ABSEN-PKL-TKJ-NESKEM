@@ -113,6 +113,42 @@
       margin-top: 20px;
       text-shadow: 0 1px 2px rgba(255,255,255,0.7);
     }
+
+    /* --- RESPONSIVE UNTUK HP --- */
+    @media (max-width: 600px) {
+
+      header h1 {
+        font-size: 24px;
+      }
+
+      header p {
+        font-size: 14px;
+      }
+
+      .container {
+        padding: 25px;
+        width: 100%;
+        max-width: 380px;
+      }
+
+      h2 {
+        font-size: 20px;
+      }
+
+      label {
+        font-size: 16px;
+      }
+
+      input, select, textarea {
+        font-size: 15px;
+        padding: 12px;
+      }
+
+      button {
+        font-size: 16px;
+        padding: 12px;
+      }
+    }
   </style>
 </head>
 
@@ -168,10 +204,8 @@
   </div>
 
   <script>
-    // otomatis isi tanggal sekarang
     document.getElementById("tanggal").value = new Date().toISOString().split("T")[0];
 
-    // saat submit
     document.getElementById('absenForm').addEventListener('submit', function(e) {
       e.preventDefault();
 
@@ -185,12 +219,10 @@
         waktu: new Date().toLocaleString()
       };
 
-      // simpan ke localStorage
       let absensi = JSON.parse(localStorage.getItem("absensi")) || [];
       absensi.push(data);
       localStorage.setItem("absensi", JSON.stringify(absensi));
 
-      // langsung berpindah
       window.location.href = "selesai.html";
     });
   </script>
