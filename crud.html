@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CRUD Absensi PKL</title>
+
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #f1f5ff;
+    }
+
+    .nav {
+        background: #1a73e8;
+        padding: 15px;
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .nav h2 { margin: 0; }
+    .btn {
+        padding: 8px 15px;
+        background: #ff5252;
+        border: none;
+        border-radius: 8px;
+        color: white;
+        cursor: pointer;
+    }
+
+    .container {
+        width: 90%;
+        margin: auto;
+        margin-top: 25px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background: white;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    th, td {
+        padding: 12px;
+        border-bottom: 1px solid #ddd;
+        text-align: left;
+    }
+
+    th {
+        background: #e3edff;
+        font-weight: bold;
+    }
+
+    .btn-edit {
+        background: #ffb400;
+        padding: 6px 10px;
+        border-radius: 5px;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+
+    .btn-delete {
+        background: #ff5252;
+        padding: 6px 10px;
+        border-radius: 5px;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+
+    .btn-back {
+        margin-top: 20px;
+        padding: 10px 20px;
+        background: #1a73e8;
+        border: none;
+        color: white;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="nav">
+    <h2>Data Absensi PKL</h2>
+    <button class="btn" onclick="hapusSemua()">Hapus Semua</button>
+</div>
+
+<div class="container">
+    <table>
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Nama</th>
+                <th>Kelas</th>
+                <th>Instansi</th>
+                <th>Tanggal</th>
+                <th>Keterangan</th>
+                <th>Catatan</th>
+                <th>Waktu Input</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+
+        <tbody id="dataTable"></tbody>
+    </table>
+
+    <button class="btn-back" onclick="window.location.href='index.html'">Kembali ke Form</button>
+</div>
+
+
+<script>
+
+// Ambil data dari localStorage
+let data = JSON.parse(localStorage.getItem("absensi")) || [];
+
+function loadData() {
+    let table = document.getElementById("dataTable");
+    table.innerHTML = "";
+
+    data.forEach((item, index) => {
+        table.innerHTML += `
+            <tr>
+                <td>${index+1}</td>
+                <td>${item.nama}</td>
+                <td>${item.kelas}</td>
+                <td>${item.instansi}</td>
+                <td>${item.tanggal}</td>
+                <td>${item.keterangan}</td>
+                <td>${item.catatan}</td>
+                <td>${item.waktu}</td>
+                <td>
+                    <button class="btn-edit" onclick="editData(${index})">Edit</button>
+                    <button class="btn-delete" onclick="hapusData(${index})">Hapus</button>
+                </td>
+            </tr>
+        `;
+    });
+}
+
+loadData();
+
+// EDIT DATA
+function editData(i) {
+    let nama = prompt("Edit Nama:", data[i].nama);
+    if (nama === null) return;
+
+    let kelas = prompt("Edit Kelas:", data[i].kelas);
+    if (kelas === null) return;
+
+    let instansi = prompt("Edit Instansi:", data[i].instansi);
+    if (instansi === null) return;
+
+    let keterangan = prompt("Edit Keterangan:", data[i].keterangan);
+    if (keterangan === null) return;
+
+    data[i].nama = nama;
+    data[i].kelas = kelas;
+    data[i].instansi = instansi;
+    data[i].keterangan = keterangan;
+
+    localStorage.setItem("absensi", JSON.stringify(data));
+    loadData();
+}
+
+// HAPUS DATA
+function hapusData(i) {
+    if (confirm("Yakin ingin menghapus data ini?")) {
+        data.splice(i, 1);
+        localStorage.setItem("absensi", JSON.stringify(data));
+        loadData();
+    }
+}
+
+// HAPUS SEMUA
+function hapusSemua() {
+    if (confirm("Hapus semua data absensi?")) {
+        localStorage.removeItem("absensi");
+        data = [];
+        loadData();
+    }
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kehadiran Siswa/Siswi SMKN 1 Kemang</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Times New Roman', serif;
+    }
+
+    body {
+      background: url("DHEVAN.jpeg") no-repeat center center fixed;
+      background-size: cover;
+      color: #000;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .overlay {
+      background-color: rgba(255, 255, 255, 0.3);
+      width: 100%;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 30px 20px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 35px;
+      color: #000;
+      text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+    }
+
+    header h1 {
+      font-size: 36px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    header p {
+      font-size: 20px;
+      font-style: italic;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(8px);
+      padding: 40px;
+      border-radius: 20px;
+      width: 90%;
+      max-width: 500px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.25);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 25px;
+      font-size: 26px;
+      font-weight: bold;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 14px;
+      margin-bottom: 18px;
+      border: 1px solid rgba(0, 0, 0, 0.3);
+      border-radius: 10px;
+      font-size: 17px;
+      background-color: rgba(255, 255, 255, 0.7);
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      background-color: #1f6feb;
+      border: none;
+      border-radius: 10px;
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s, transform .15s;
+    }
+
+    button:hover {
+      background-color: #1558c0;
+      transform: scale(1.03);
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 15px;
+      color: #000;
+      margin-top: 20px;
+      text-shadow: 0 1px 2px rgba(255,255,255,0.7);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="overlay">
+
+    <header>
+      <h1>KEHADIRAN SISWA/SISWI SMKN 1 KEMANG</h1>
+      <p>JURUSAN TEKNIK JARINGAN KOMPUTER</p>
+      <p>"ALWAYS CONNECTED"</p>
+    </header>
+
+    <div class="container">
+      <h2>Formulir Absensi PKL</h2>
+
+      <form id="absenForm">
+        <label for="nama">Nama Lengkap</label>
+        <input type="text" id="nama" name="nama" placeholder="Masukkan nama lengkap" required>
+
+        <label for="kelas">Kelas</label>
+        <select id="kelas" name="kelas" required>
+          <option value="">-- Pilih Kelas --</option>
+          <option value="XII TJKT 1">XII TJKT 1</option>
+          <option value="XII TJKT 2">XII TJKT 2</option>
+          <option value="XII TJKT 3">XII TJKT 3</option>
+        </select>
+
+        <label for="instansi">Tempat PKL</label>
+        <input type="text" id="instansi" name="instansi" placeholder="Masukkan nama instansi PKL" required>
+
+        <label for="tanggal">Tanggal</label>
+        <input type="date" id="tanggal" name="tanggal" required>
+
+        <label for="keterangan">Keterangan</label>
+        <select id="keterangan" name="keterangan" required>
+          <option value="">-- Pilih Keterangan --</option>
+          <option value="Hadir">Hadir</option>
+          <option value="Izin">Izin</option>
+          <option value="Sakit">Sakit</option>
+          <option value="Alfa">Alfa</option>
+        </select>
+
+        <label for="catatan">Catatan (Opsional)</label>
+        <textarea id="catatan" name="catatan" rows="3" placeholder="Catatan tambahan..."></textarea>
+
+        <button type="submit">Kirim Absensi</button>
+      </form>
+
+      <div class="footer">
+        © DHEVAN ANDHYRA 2025 TJKT | SMKN 1 KEMANG
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // otomatis isi tanggal sekarang
+    document.getElementById("tanggal").value = new Date().toISOString().split("T")[0];
+
+    // saat submit
+    document.getElementById('absenForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const data = {
+        nama: document.getElementById('nama').value,
+        kelas: document.getElementById('kelas').value,
+        instansi: document.getElementById('instansi').value,
+        tanggal: document.getElementById('tanggal').value,
+        keterangan: document.getElementById('keterangan').value,
+        catatan: document.getElementById('catatan').value,
+        waktu: new Date().toLocaleString()
+      };
+
+      // simpan ke localStorage
+      let absensi = JSON.parse(localStorage.getItem("absensi")) || [];
+      absensi.push(data);
+      localStorage.setItem("absensi", JSON.stringify(absensi));
+
+      // langsung berpindah
+      window.location.href = "selesai.html";
+    });
+  </script>
+</body>
+</html>

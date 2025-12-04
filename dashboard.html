@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard</title>
+
+<style>
+    body {
+        margin: 0;
+        font-family: "Poppins", sans-serif;
+        background: linear-gradient(135deg, #1f1c2c, #928DAB);
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+    }
+
+    .container {
+        background: rgba(255,255,255,0.1);
+        backdrop-filter: blur(15px);
+        padding: 40px;
+        border-radius: 25px;
+        width: 400px;
+        text-align: center;
+        box-shadow: 0 0 25px rgba(0,0,0,0.2);
+        animation: fadeIn .7s ease;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    h1 {
+        margin-bottom: 15px;
+        font-size: 28px;
+        font-weight: 700;
+    }
+
+    p {
+        margin-bottom: 25px;
+        font-size: 16px;
+        color: #eaeaea;
+    }
+
+    button {
+        width: 100%;
+        padding: 16px;
+        border: none;
+        border-radius: 12px;
+        font-size: 17px;
+        cursor: pointer;
+        margin-top: 12px;
+        color: white;
+        font-weight: 600;
+        transition: 0.25s;
+    }
+
+    .crud-btn { background: #00e0ff; }
+    .crud-btn:hover { background: #00b4cc; }
+
+    .done-btn { background: #00ff99; }
+    .done-btn:hover { background: #00cc77; }
+
+    .logout-btn { background: #ff4d4d; }
+    .logout-btn:hover { background: #cc0000; }
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+    <h1>Dashboard</h1>
+    <p>Silakan pilih menu untuk melanjutkan.</p>
+
+    <!-- 🔐 CRUD Sekarang masuk ke login dulu -->
+    <button class="crud-btn" onclick="window.location.href='login.html'">
+        🔐 Login Admin & Kelola CRUD
+    </button>
+
+    <!-- Direct ke Halaman Selesai -->
+    <button class="done-btn" onclick="window.location.href='selesai.html'">
+        ✔ Halaman Selesai Absensi
+    </button>
+
+    <!-- Kembali ke Login -->
+    <button class="logout-btn" onclick="window.location.href='login.html'">
+        🚪 Logout
+    </button>
+
+</div>
+
+</body>
+</html>
