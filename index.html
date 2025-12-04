@@ -114,40 +114,18 @@
       text-shadow: 0 1px 2px rgba(255,255,255,0.7);
     }
 
-    /* --- RESPONSIVE UNTUK HP --- */
     @media (max-width: 600px) {
-
-      header h1 {
-        font-size: 24px;
-      }
-
-      header p {
-        font-size: 14px;
-      }
-
+      header h1 { font-size: 24px; }
+      header p { font-size: 14px; }
       .container {
         padding: 25px;
         width: 100%;
         max-width: 380px;
       }
-
-      h2 {
-        font-size: 20px;
-      }
-
-      label {
-        font-size: 16px;
-      }
-
-      input, select, textarea {
-        font-size: 15px;
-        padding: 12px;
-      }
-
-      button {
-        font-size: 16px;
-        padding: 12px;
-      }
+      h2 { font-size: 20px; }
+      label { font-size: 16px; }
+      input, select, textarea { font-size: 15px; padding: 12px; }
+      button { font-size: 16px; padding: 12px; }
     }
   </style>
 </head>
@@ -203,28 +181,55 @@
     </div>
   </div>
 
-  <script>
-    document.getElementById("tanggal").value = new Date().toISOString().split("T")[0];
+<!-- 🔥 SCRIPT FIREBASE SUDAH JADI -->
+<script type="module">
 
-    document.getElementById('absenForm').addEventListener('submit', function(e) {
-      e.preventDefault();
+  // Firebase SDK
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+  import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
-      const data = {
-        nama: document.getElementById('nama').value,
-        kelas: document.getElementById('kelas').value,
-        instansi: document.getElementById('instansi').value,
-        tanggal: document.getElementById('tanggal').value,
-        keterangan: document.getElementById('keterangan').value,
-        catatan: document.getElementById('catatan').value,
-        waktu: new Date().toLocaleString()
-      };
+  // Konfigurasi Firebase kamu
+  const firebaseConfig = {
+    apiKey: "AIzaSyCXZmEyB0fwz8KoPg8vALroAYHva8L6FBU",
+    authDomain: "absensi-pkl-smkn1kemang.firebaseapp.com",
+    databaseURL: "https://absensi-pkl-smkn1kemang-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "absensi-pkl-smkn1kemang",
+    storageBucket: "absensi-pkl-smkn1kemang.firebasestorage.app",
+    messagingSenderId: "113345785934",
+    appId: "1:113345785934:web:d38541a97514984aaf131f"
+  };
 
-      let absensi = JSON.parse(localStorage.getItem("absensi")) || [];
-      absensi.push(data);
-      localStorage.setItem("absensi", JSON.stringify(absensi));
+  // Inisialisasi Firebase
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
 
-      window.location.href = "selesai.html";
-    });
-  </script>
+  // Set tanggal otomatis hari ini
+  document.getElementById("tanggal").value = new Date().toISOString().split("T")[0];
+
+  // Kirim data ke Firebase
+  document.getElementById("absenForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const data = {
+      nama: document.getElementById("nama").value,
+      kelas: document.getElementById("kelas").value,
+      instansi: document.getElementById("instansi").value,
+      tanggal: document.getElementById("tanggal").value,
+      keterangan: document.getElementById("keterangan").value,
+      catatan: document.getElementById("catatan").value,
+      waktu: new Date().toLocaleString()
+    };
+
+    push(ref(db, "absensi"), data)
+      .then(() => {
+        window.location.href = "selesai.html";
+      })
+      .catch((error) => {
+        alert("Gagal mengirim data: " + error);
+      });
+  });
+
+</script>
+
 </body>
 </html>

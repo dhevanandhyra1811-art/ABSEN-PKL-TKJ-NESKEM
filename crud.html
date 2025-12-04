@@ -116,79 +116,96 @@
     <button class="btn-back" onclick="window.location.href='index.html'">Kembali ke Form</button>
 </div>
 
+<!-- FIREBASE -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+    import {
+      getDatabase,
+      ref,
+      onValue,
+      update,
+      remove,
+      set
+    } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
-<script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyCXZmEyB0fwz8KoPg8vALroAYHva8L6FBU",
+      authDomain: "absensi-pkl-smkn1kemang.firebaseapp.com",
+      databaseURL: "https://absensi-pkl-smkn1kemang-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "absensi-pkl-smkn1kemang",
+      storageBucket: "absensi-pkl-smkn1kemang.firebasestorage.app",
+      messagingSenderId: "113345785934",
+      appId: "1:113345785934:web:d38541a97514984aaf131f"
+    };
 
-// Ambil data dari localStorage
-let data = JSON.parse(localStorage.getItem("absensi")) || [];
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
 
-function loadData() {
-    let table = document.getElementById("dataTable");
-    table.innerHTML = "";
+    const table = document.getElementById("dataTable");
 
-    data.forEach((item, index) => {
-        table.innerHTML += `
-            <tr>
-                <td>${index+1}</td>
-                <td>${item.nama}</td>
-                <td>${item.kelas}</td>
-                <td>${item.instansi}</td>
-                <td>${item.tanggal}</td>
-                <td>${item.keterangan}</td>
-                <td>${item.catatan}</td>
-                <td>${item.waktu}</td>
-                <td>
-                    <button class="btn-edit" onclick="editData(${index})">Edit</button>
-                    <button class="btn-delete" onclick="hapusData(${index})">Hapus</button>
-                </td>
-            </tr>
-        `;
+    // Load data realtime
+    onValue(ref(db, "absensi"), (snapshot) => {
+        table.innerHTML = "";
+        let no = 1;
+
+        snapshot.forEach((child) => {
+            let key = child.key;
+            let item = child.val();
+
+            table.innerHTML += `
+                <tr>
+                    <td>${no++}</td>
+                    <td>${item.nama}</td>
+                    <td>${item.kelas}</td>
+                    <td>${item.instansi}</td>
+                    <td>${item.tanggal}</td>
+                    <td>${item.keterangan}</td>
+                    <td>${item.catatan}</td>
+                    <td>${item.waktu}</td>
+                    <td>
+                        <button class="btn-edit" onclick="editData('${key}', '${item.nama}', '${item.kelas}', '${item.instansi}', '${item.keterangan}')">Edit</button>
+                        <button class="btn-delete" onclick="hapusData('${key}')">Hapus</button>
+                    </td>
+                </tr>
+            `;
+        });
     });
-}
 
-loadData();
+    // Hapus 1 data
+    window.hapusData = function(key) {
+        if (confirm("Yakin ingin menghapus data ini?")) {
+            remove(ref(db, "absensi/" + key));
+        }
+    };
 
-// EDIT DATA
-function editData(i) {
-    let nama = prompt("Edit Nama:", data[i].nama);
-    if (nama === null) return;
+    // Edit data
+    window.editData = function(key, nama, kelas, instansi, keterangan) {
+        let newNama = prompt("Edit Nama:", nama);
+        if (newNama === null) return;
 
-    let kelas = prompt("Edit Kelas:", data[i].kelas);
-    if (kelas === null) return;
+        let newKelas = prompt("Edit Kelas:", kelas);
+        if (newKelas === null) return;
 
-    let instansi = prompt("Edit Instansi:", data[i].instansi);
-    if (instansi === null) return;
+        let newInstansi = prompt("Edit Instansi:", instansi);
+        if (newInstansi === null) return;
 
-    let keterangan = prompt("Edit Keterangan:", data[i].keterangan);
-    if (keterangan === null) return;
+        let newKet = prompt("Edit Keterangan:", keterangan);
+        if (newKet === null) return;
 
-    data[i].nama = nama;
-    data[i].kelas = kelas;
-    data[i].instansi = instansi;
-    data[i].keterangan = keterangan;
+        update(ref(db, "absensi/" + key), {
+            nama: newNama,
+            kelas: newKelas,
+            instansi: newInstansi,
+            keterangan: newKet
+        });
+    };
 
-    localStorage.setItem("absensi", JSON.stringify(data));
-    loadData();
-}
-
-// HAPUS DATA
-function hapusData(i) {
-    if (confirm("Yakin ingin menghapus data ini?")) {
-        data.splice(i, 1);
-        localStorage.setItem("absensi", JSON.stringify(data));
-        loadData();
-    }
-}
-
-// HAPUS SEMUA
-function hapusSemua() {
-    if (confirm("Hapus semua data absensi?")) {
-        localStorage.removeItem("absensi");
-        data = [];
-        loadData();
-    }
-}
-
+    // Hapus semua data
+    window.hapusSemua = function() {
+        if (confirm("Hapus semua data absensi?")) {
+            remove(ref(db, "absensi"));
+        }
+    };
 </script>
 
 </body>
